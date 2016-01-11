@@ -1,8 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
   <script src="bower_components/react/react.js"></script>
-  <link  href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
+  <script src="bower_components/react/react-dom.js"></script>
+  <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
   <div id="container"></div>
@@ -29,8 +31,8 @@
         });
 
         return(
-          <div class="row spacer">
-            <div class="col-lg-4 col-lg-offset-4">
+          <div className="row spacer">
+            <div className="col-lg-4 col-lg-offset-4">
               <table width="100%">
                 <thead>
                   <tr>
@@ -49,9 +51,9 @@
     var SearchBar = React.createClass({
       render: function(){
         return(
-          <div class="row ">
-            <div class="col-lg-4 col-lg-offset-4">
-              <input type="search" class="form-control" placeholder="Search for episode" />
+          <div className="row ">
+            <div className="col-lg-4 col-lg-offset-4">
+              <input type="search" className="form-control" placeholder="Search for episode" />
             </div>
           </div>
         );
@@ -61,7 +63,7 @@
     var FilterableEpisodeTable = React.createClass({
       render: function(){
         return(
-          <div class="spacer">
+          <div className="spacer">
             <SearchBar />
             <EpisodeTable episodes={this.props.episodes} />
           </div>
@@ -82,7 +84,7 @@
          }
        ];
 
-    React.renderComponent(<FilterableEpisodeTable episodes={episodes} />, document.getElementById('container'));
+    ReactDOM.render(<FilterableEpisodeTable episodes={episodes} />, document.getElementById('container'));
   </script>
 </body>
 </html>
