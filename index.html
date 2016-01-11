@@ -11,12 +11,20 @@
 
   <script type="text/jsx">
     var EpisodeRow= React.createClass({
+      getInitialState: function() {
+        return {
+          viewed: false
+        };
+      },
+      handleClick: function() {
+        this.setState({viewed: true});
+      },
       render: function() {
         return (
           <tr>
             <td>{this.props.episode.title}</td>
             <td>
-              <a href="#">View</a>
+              <a onClick={this.handleClick}>View {this.state.viewed ? '(viewed)' : ''}</a>
             </td>
           </tr>
         );
@@ -24,9 +32,11 @@
     });
 
     var EpisodeTable = React.createClass({
-      render: function(){
+      render: function() {
         var props= this.props;
-        var rows= props.episodes.map(function(episode){
+        var rows= props.episodes.filter(function(episode){
+          return episode.title.toLowerCase().indexOf(props.filterText.toLowerCase()) > -1;
+        }).map(function(episode){
           return <EpisodeRow key={episode.title} episode={episode} />;
         });
 
@@ -49,11 +59,18 @@
     });
 
     var SearchBar = React.createClass({
-      render: function(){
+      handleChange: function() {
+        console.log(this.refs)
+        this.props.onUserInput(this.refs.filterTextInput.getDOMNode().value);
+      },
+      render: function() {
         return(
           <div className="row ">
             <div className="col-lg-4 col-lg-offset-4">
-              <input type="search" className="form-control" placeholder="Search for episode" />
+              <form onSubmit={this.handleSubmit}>
+                <input type="search" ref="filterTextInput" value={this.props.filterText} onChange={this.handleChange} type="search"
+                className="form-control" placeholder="Search for episode" />
+              </form>
             </div>
           </div>
         );
@@ -61,11 +78,23 @@
     });
 
     var FilterableEpisodeTable = React.createClass({
-      render: function(){
+      getInitialState: function() {
+        return {
+          filterText: ''
+        };
+      },
+
+      handleUserInput: function(filterText) {
+        this.setState({
+          filterText: filterText
+        });
+      },
+
+      render: function() {
         return(
           <div className="spacer">
-            <SearchBar />
-            <EpisodeTable episodes={this.props.episodes} />
+            <SearchBar onUserInput={this.handleUserInput} filterText={this.state.filterText} />
+            <EpisodeTable filterText={this.state.filterText} episodes={this.props.episodes} />
           </div>
         );
       }
